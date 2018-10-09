@@ -1,10 +1,59 @@
 
+https://docs.microsoft.com/zh-cn/powershell/scripting/setup/installing-windows-powershell?view=powershell-6
+
+github
+https://github.com/powershell/powershell
+
+安装教程
+https://docs.microsoft.com/zh-cn/powershell/scripting/setup/installing-powershell?view=powershell-6
+
+安装教程
+https://docs.microsoft.com/zh-cn/powershell/scripting/setup/installing-powershell-core-on-windows?view=powershell-6
+https://github.com/PowerShell/PowerShell/releases
+
+
 PowerShell
 (New-TimeSpan 2018-08-03).days
 (New-TimeSpan -end 2018-08-03).days
 (New-TimeSpan 1992-07-1 -end 2018-09-20).days
 
 
+Get-Process | Where-Object{$_.Id -gt 2000} | Format-Table ProcessName, @{Expression={$_.Id}; Name="Id>2000"}
+ps  | Where-Object{$_.Id -gt 2000} | Format-Table ProcessName, @{Expression={$_.Id}; Name="Id>2000"}
 
 
 
+
+
+如何用PowerShell获取进程信息
+get-process # 获取当前运行的所有进程
+get-process powershell # 获取进程powershell的简要信息
+get-process powershell | select-object * #获取进程powershell的详细信息
+get-help get-process # 获取get-process命令的帮助信息
+get-help get-process -examples # 获取get-process命令的使用例子
+
+
+
+
+
+结束进程
+#1.纯cmdlet命令
+Get-Process -Name idea64
+ps -name studio64
+ps -name chrome
+ps -name qq
+ps -name wechat
+
+
+
+
+Get-Process -Name notepad | Stop-Process
+
+#2.cmdlet+遍历
+Get-Process -Name notepad | foreach-object{$_.Kill()} 
+
+#3.WMI 对象 + 遍历 + 对象方法 
+Get-WmiObject Win32_Process -Filter "name = 'notepad.exe'" | ForEach-Object{$_.Terminate()  | Out-Null }
+
+#4.WMI 对象 + 遍历 + cmdlet方法
+Get-WmiObject Win32_Process -Filter "name = 'notepad.exe'" | Invoke-WmiMethod -Name Terminate | Out-Null
